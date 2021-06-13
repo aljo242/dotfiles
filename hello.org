@@ -1,0 +1,45 @@
+* First Heading
+
+  Here is *some* content
+
+  Here is the [[https://orgmode.org][Org Mode Homepage]] 
+  
+* Second heading
+
+ Here is more content
+
+** Subheading
+   
+   Subheading content
+ 
+* Third heading
+  
+  You can hit Shift-TAB to cycle through heading visibilities in ORG mode
+ 
+* Tables
+
+  | Name | Age | Uses Emacs |
+  | Alex |  24 | YES        |
+  | Chet |  64 | NO         |
+
+* Bulleted Lists
+  - First item
+  - Second item
+  - Third item
+
+    
+* Checklists
+  - [ ] First item
+  - [ ] Second item
+  - [X] Third item (checked)
+
+    
+* Source-code Blocks
+  #+begin_src emacs-lisp
+  
+  (defun my-elisp-func ()
+    (message "Hello!"))
+
+  #+end_src
+
+* TODO todo-block
