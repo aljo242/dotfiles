@@ -185,7 +185,7 @@
 
 ;; doom themes
 (use-package doom-themes)
-(load-theme 'doom-Iosvkem t)
+(load-theme 'doom-acario-dark t)
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -313,7 +313,51 @@
 (use-package forge)
 
 ;; set up org mode
-(use-package org)
+(defun shmeemacs/org-mode-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (auto-fill-mode 0)
+  (visual-line-mode 1)
+  (setq evil-auto-indent nil)
+  (diminish org-indent-mode))
+
+(use-package org
+  :hook (org-mode . shmeemacs/org-mode-setup)
+  :config
+  (setq org-ellipsis " ▾"
+	org-hide-emphasis-markers t
+	org-src-fontify-natively t
+	org-fontify-quote-and-verse-blocks t
+	org-src-tab-acts-natively t
+	org-edit-src-content-indentation 2
+	org-hide-block-startup nil
+	org-src-preserve-indentation nil
+	org-startup-folded 'content
+	org-cycle-separator-lines 2)
+
+  (setq org-modules
+	'(org-crypt
+	  org-habit
+	  org-bookmark
+	  org-eshell
+	  org-irc))
+
+  (setq org-refile-targets '((nil :maxlevel . 1)
+			     (org-agenda-files :maxelevel . 1)))
+
+  (setq org-outline-path-complete-in-steps nil)
+  (setq org-refile-use-outline-path t)
+
+  (evil-define-key '(normal insert visual) org-mode-map (kbd "C-j") 'org-next-visible-heading)
+  (evil-define-key '(normal insert visual) org-mode-map (kbd "C-k") 'org-previous-visible-heading)
+
+  (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
+  (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (ledger . t))))
 
 (provide 'init)
 
