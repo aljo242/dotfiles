@@ -325,7 +325,7 @@
   :hook (org-mode . shmeemacs/org-mode-setup)
   :config
   (setq org-ellipsis " ▾"
-	org-hide-emphasis-markers t
+	org-hide-emphasis-markers nil
 	org-src-fontify-natively t
 	org-fontify-quote-and-verse-blocks t
 	org-src-tab-acts-natively t
@@ -335,6 +335,14 @@
 	org-startup-folded 'content
 	org-cycle-separator-lines 2)
 
+  ;; org-agenda settings
+  (setq org-agenda-files
+	'("~/life/tasks.org"
+	  "~/life/birthdays.org")
+	org-agenda-start-with-log-mode t
+        org-agenda-log-done 'time
+	org-log-into-drawer t)  
+  
   (setq org-modules
 	'(org-crypt
 	  org-habit
@@ -358,6 +366,38 @@
    'org-babel-load-languages
    '((emacs-lisp . t)
      (ledger . t))))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode))
+  
+(dolist (face '((org-level-1 . 1.5)
+		(org-level-2 . 1.25)
+		(org-level-3 . 1.1)
+		(org-level-4 . 1.0)
+		(org-level-5 . 1.1)
+		(org-level-6 . 1.1)
+		(org-level-7 . 1.1)
+		(org-level-8 . 1.1)))
+  (set-face-attribute (car face) nil :font "Fira Code Retina" :weight 'regular :height (cdr face)))
+
+;; ensure certain items are ALWAYS fixed pitch
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+(defun shmeemacs/org-mode-visual-fill ()
+  (setq visual-fill-column-width 100
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+;; visual column package for ORG mode so lines wrap
+(use-package visual-fill-column
+  :hook (org-mode . shmeemacs/org-mode-visual-fill))
 
 (provide 'init)
 

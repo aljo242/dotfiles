@@ -4,7 +4,7 @@
 
 * First Heading
 
-  Here is *some* content
+  Here is *some* /content/
 
   Here is the [[https://orgmode.org][Org Mode Homepage]] 
   
@@ -14,8 +14,11 @@
 
 ** Subheading
    
-   Subheading content
- 
+Subheading content
+
+*** sub sub heading
+hello
+
 * Third heading
   
   You can hit Shift-TAB to cycle through heading visibilities in ORG mode
