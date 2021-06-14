@@ -535,8 +535,162 @@
 
 
 ;; LANGUAGE SERVERS
+(use-package lsp-mode
+  :commands lsp
+  :hook ((typescript-mode) . lsp)
+  :bind (:map lsp-mode-map
+	      ("TAB" . completion-at-point))
+  :custom (lsp-headerline-breadcrumb-enable nil))
 
+(shmeemacs/leader-keys
+ "l" '(:ignore t :which-key "lsp")
+ "ld" 'xref-find-definitions
+ "lr" 'xref-find-references
+ "ln" 'lsp-ui-find-next-reference
+ "lp" 'lsp-ui-find-prev-reference
+ "ls" 'counsel-imenu
+ "le" 'lsp-ui-flycheck-list
+ "lS" 'lsp-ui-sideline-mode
+ "lX" 'lsp-execute-code-action)
 
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :config
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-sideline-show-hover nil)
+  (setq lsp-ui-doc-position 'bottom)
+  (lsp-ui-doc-show))
+
+;; debug adapter support
+(use-package dap-mode
+  :custom
+  (lsp-enable-dap-auto-configure nil)
+  :config
+  (dap-ui-mode 1)
+  (dap-tooltip-mode 1)
+  (require 'dap-node)
+  (dap-node-setup))
+
+;; lisp and scheme configs
+(use-package lispy
+  :hook ((emacs-lisp-mode . lispy-mode)
+	 (scheme-mode . lispy-mode)))
+
+(use-package lispyville
+  :hook ((lispy-mode . lispyville-mode))
+  :config
+  (lispyville-set-key-theme '(operators c-w additional
+					additional-movement slurp/barf-cp
+					prettify)))
+
+;; set up nvm to manage node versions
+(use-package nvm
+  :defer t)
+
+;; typescript/javascript
+(use-package typescript-mode
+  :mode "\\.ts\\'"
+  :hook (typescript-mode . lsp-deferred)
+  :config
+  (setq typescript-indent-level 2))
+
+;; Clojure
+(use-package cider
+  :mode "\\.clj[sc]?\\'"
+  :config
+  (evil-collection-cider-setup))
+
+;; common lisp
+(use-package sly
+  :disabled
+  :mode "\\.lisp\\'")
+
+(use-package slime
+  :disabled
+  :mode "\\.lisp\\'")
+
+;; C/C++
+(use-package ccls
+  :hook ((c-mode c++-mode objc-mode cuda-mode) .
+	 (lambda () (require 'ccls) (lsp))))
+
+;; golang
+(use-package go-mode
+  :hook (go-mode . lsp-deferred))
+
+;; rust
+(use-package rust-mode
+  :mode "\\.rs\\'"
+  :init (setq rust-format-on-save t))
+
+(use-package cargo
+  :defer t)
+
+;; markdown
+(use-package markdown-mode
+  :mode "\\.md\\'"
+  :config
+  (setq markdown-command "marked")
+  (defun shmeemacs/set-markdown-header-font-sizes ()
+    (dolist (face '((markdown-header-face-1 . 1.2)
+                    (markdown-header-face-2 . 1.1)
+                    (markdown-header-face-3 . 1.0)
+                    (markdown-header-face-4 . 1.0)
+                    (markdown-header-face-5 . 1.0)))
+      (set-face-attribute (car face) nil :weight 'normal :height (cdr face))))
+
+  (defun shmeemacs/markdown-mode-hook ()
+    (shmeemacs/set-markdown-header-font-sizes))
+
+  (add-hook 'markdown-mode-hook 'shmeemacs/markdown-mode-hook))
+
+;; HTML
+(use-package web-mode
+  :mode "(\\.\\(html?\\|ejs\\|tsx\\|jsx\\)\\'"
+  :config
+  (setq-default web-mode-code-indent-offset 2)
+  (setq-default web-mode-markup-indent-offset 2)
+  (setq-default web-mode-attribute-indent-offset 2))
+
+;; 1. Start the server with `httpd-start'
+;; 2. Use `impatient-mode' on any buffer
+(use-package impatient-mode)
+
+(use-package skewer-mode)
+
+;; YAML
+(use-package yaml-mode
+  :mode "\\.ya?ml\\'")
+
+;; CODE COMPILATION
+(use-package compile
+  :custom
+  (compilation-scroll-output t))
+
+(defun auto-recompile-buffer ()
+  (interactive)
+  (if (member #'recompile after-save-hook)
+      (remove-hook 'after-save-hook #'recompile t)
+    (add-hook 'after-save-hook #'recompile nil t)))
+
+;; sytax checking with flycheck
+(use-package flycheck
+  :defer t
+  :hook (lsp-mode . flycheck-mode))
+
+;; snippets
+(use-package yasnippet
+  :hook (prog-mode . yas-minor-mode)
+  :config
+  (yas-reload-all))
+
+;; smart parentheses
+(use-package smartparens
+  :hook (prog-mode . smartparens-mode))
+
+;; http
+(use-package know-your-http-well
+  :defer t)
 
 (provide 'init)
 
