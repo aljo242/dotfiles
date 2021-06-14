@@ -36,17 +36,40 @@ hello
 
     
 * Checklists
+   
   - [ ] First item
   - [ ] Second item
   - [X] Third item (checked)
 
     
 * Source-code Blocks
-  #+begin_src emacs-lisp
-  
-  (defun my-elisp-func ()
-    (message "Hello!"))
+  #+begin_src python :results output
+
+    def greeting():
+         return "HELLO"
+    print(greeting())
 
   #+end_src
+
+#+RESULTS:
+: HELLO
+  
+  #+begin_src python :results output
+  def greeting():
+      return "Hello!"
+
+  print(greeting())
+  #+end_src
+
+#+begin_src python :tangle ./out.py
+    def test():
+      return 1 == 1
+
+    if test():
+      print("HI")
+#+end_src
+  
+  #+RESULTS:
+  : HI
 
 * TODO todo-block

@@ -61,8 +61,7 @@
   (add-hook mode (lambda () display-line-numbers-mode 1)))
 
 ;; disable for the following modes:
-(dolist (mode '(org-mode-hook
-		shell-mode-hook
+(dolist (mode '(shell-mode-hook
 		term-mode-hook
 		eshell-mode-hook))
   (add-hook mode (lambda () display-line-numbers-mode 1)))
@@ -470,6 +469,17 @@
       ("mw" "Weight" table-line (file+headline "~/life/metrics.org" "Weight")
        "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
+  (require 'org-tempo)
+
+  (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
+  (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("go" . "src go"))
+  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
+  (add-to-list 'org-structure-template-alist '("json" . "src json"))
+
   (define-key global-map (kbd "C-c j")
     (lambda () (interactive) (org-capture nil "jj")))
   
@@ -522,6 +532,11 @@
 ;; visual column package for ORG mode so lines wrap
 (use-package visual-fill-column
   :hook (org-mode . shmeemacs/org-mode-visual-fill))
+
+
+;; LANGUAGE SERVERS
+
+
 
 (provide 'init)
 
