@@ -7,7 +7,7 @@
 ;; no start up message
 ;;; Code:
 
-(defvar shmeemacs/default-font-size 100)
+(defvar shmeemacs/default-font-size 110)
 
 ;; default is 800 KB
 (setq gc-cons-threshold (* 50 1000 1000))
@@ -185,7 +185,7 @@
 
 ;; doom themes
 (use-package doom-themes)
-(load-theme 'doom-acario-dark t)
+(load-theme 'doom-challenger-deep t)
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -364,10 +364,11 @@
   ;; org-agenda settings
   (setq org-agenda-files
 	'("~/life/tasks.org"
-	  "~/life/birthdays.org")
+	  "~/life/birthdays.org"
+	  "~/life/habits.org")
 	org-agenda-start-with-log-mode t
         org-agenda-log-done 'time
-	org-log-into-drawer t)  
+	org-log-into-drawer t)
 
   ;; set up todo workflows
   ;; entry 1 is the default workflow
@@ -445,28 +446,28 @@
 
   (setq org-capture-templates
     `(("t" "Tasks / Projects")
-      ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
+      ("tt" "Task" entry (file+olp "~/life/tasks.org" "Inbox")
            "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
       ("j" "Journal Entries")
       ("jj" "Journal" entry
-           (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+           (file+olp+datetree "~/life/journal.org")
            "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
            ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
            :clock-in :clock-resume
            :empty-lines 1)
       ("jm" "Meeting" entry
-           (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+           (file+olp+datetree "~/life/journal.org")
            "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
            :clock-in :clock-resume
            :empty-lines 1)
 
       ("w" "Workflows")
-      ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+      ("we" "Checking Email" entry (file+olp+datetree "~/life/journal.org")
            "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
       ("m" "Metrics Capture")
-      ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
+      ("mw" "Weight" table-line (file+headline "~/life/metrics.org" "Weight")
        "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
   (define-key global-map (kbd "C-c j")
@@ -479,8 +480,9 @@
 	  org-eshell
 	  org-irc))
 
-  (setq org-refile-targets '((nil :maxlevel . 1)
-			     (org-agenda-files :maxelevel . 1)))
+  (setq org-refile-targets
+    '(("archive.org" :maxlevel . 1)
+      ("tasks.org" :maxlevel . 1)))
 
   (setq org-outline-path-complete-in-steps nil)
   (setq org-refile-use-outline-path t)
@@ -494,7 +496,16 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
-     (ledger . t)))
+     (ledger . t)
+     (python . t)
+     (C . t)
+     (haskell . t)
+     (latex . t)
+     (makefile . t)
+     (lisp . t)
+     (R . t)
+     (lua . t)
+     (sql . t)))
 
   (shmeemacs/org-font-setup))
 
